@@ -5,6 +5,10 @@ cmake_install.cmake
 compile_commands.json
 Makefile
 build/
+build-web/
+
+# Third-party assets
+assets/
 
 # Compiled object files
 *.o
