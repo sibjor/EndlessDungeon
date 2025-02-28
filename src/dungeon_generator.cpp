@@ -6,7 +6,7 @@
 #include <vector>
 #include <algorithm>
 
-const int MIN_ROOM_SIZE = 5; // Define the minimum room size
+const int MIN_ROOM_SIZE = 8; // Increase the minimum room size to reduce the number of splits
 const int MIN_STAIR_AMOUNT = 2; // Define the minimum amount of stairs
 
 struct Node {
@@ -50,11 +50,11 @@ bool splitNode(Node* node) {
     return true;
 }
 
-void createRooms(Node* node, std::vector<Room>& rooms) {
+void createRooms(Node* node, std::vector<Room>& rooms, std::vector<std::vector<char>>& dungeon) {
     if (node->left || node->right) {
         // This node has children, so recurse
-        if (node->left) createRooms(node->left, rooms);
-        if (node->right) createRooms(node->right, rooms);
+        if (node->left) createRooms(node->left, rooms, dungeon);
+        if (node->right) createRooms(node->right, rooms, dungeon);
     } else {
         // This node is a leaf, so create a room
         if (node->width > MIN_ROOM_SIZE && node->height > MIN_ROOM_SIZE) {
@@ -69,10 +69,24 @@ void createRooms(Node* node, std::vector<Room>& rooms) {
 
             node->room = {x, y, roomWidth, roomHeight};
             rooms.push_back(node->room);
+
+            // Mark the floor tiles in the dungeon
+            for (int i = y; i < y + roomHeight; ++i) {
+                for (int j = x; j < x + roomWidth; ++j) {
+                    dungeon[i][j] = FLOOR;
+                }
+            }
         } else {
             // If the node is too small to create a room, create a minimal room
             node->room = {node->x, node->y, node->width, node->height};
             rooms.push_back(node->room);
+
+            // Mark the floor tiles in the dungeon
+            for (int i = node->y; i < node->y + node->height; ++i) {
+                for (int j = node->x; j < node->x + node->width; ++j) {
+                    dungeon[i][j] = FLOOR;
+                }
+            }
         }
     }
 }
@@ -96,12 +110,10 @@ void connectRooms(Node* node, std::vector<std::vector<char>>& dungeon) {
 
         while (x1 != x2) {
             dungeon[y1][x1] = FLOOR;
-            if (x1 + 1 < WIDTH - 1) dungeon[y1][x1 + 1] = FLOOR;
             x1 += (x2 > x1) ? 1 : -1;
         }
         while (y1 != y2) {
             dungeon[y1][x1] = FLOOR;
-            if (y1 + 1 < HEIGHT - 1) dungeon[y1 + 1][x1] = FLOOR;
             y1 += (y2 > y1) ? 1 : -1;
         }
 
@@ -159,7 +171,7 @@ std::vector<std::vector<char>> generateDungeon() {
     }
 
     // Create rooms in the leaf nodes
-    createRooms(root, rooms);
+    createRooms(root, rooms, dungeon);
 
     // Connect the rooms with corridors
     connectRooms(root, dungeon);
