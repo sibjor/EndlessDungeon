@@ -4,53 +4,54 @@
 #include <vector>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include "slicer.h"
 
-// Function declarations
-std::vector<std::string> findAssetDirectory(const std::string& rootDir, const std::string& assetDir);
-void sliceSpritesheet(const std::vector<std::string>& assetFiles, int spriteWidth, int spriteHeight, const std::string& outputDir);
-
-int main() {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-        return 1;
-    }
-
-    // Find asset directory and get all .png files
-    std::vector<std::string> assetFiles = findAssetDirectory("EndlessDungeon", "assets");
-
-    // Example: Slice the assets found
-    if (!assetFiles.empty()) {
-        sliceSpritesheet(assetFiles, 32, 32, "output/directory"); // Example sprite size 32x32
-    }
-
-    SDL_Quit();
-    return 0;
-}
-
-// Function to find the asset directory and return all .png files
-std::vector<std::string> findAssetDirectory(const std::string& rootDir, const std::string& assetDir) {
+std::vector<std::string> findAssetDirectory(const std::string& startDir, const std::string& rootDir, const std::string& assetDir) {
     std::vector<std::string> assetFiles;
-    // Search for the asset directory
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(rootDir)) {
-        if (entry.is_directory() && entry.path().filename() == assetDir) {
-            // If the asset directory is found, return all .png files in the directory and its subdirectories
-            for (const auto& file : std::filesystem::recursive_directory_iterator(entry.path())) {
-                if (file.path().extension() == ".png") {
-                    assetFiles.push_back(file.path().string());
-                }
-            }
+    std::filesystem::path currentPath = std::filesystem::absolute(startDir);
+
+    // Search upwards for the root directory
+    while (currentPath != currentPath.root_path()) {
+        if (currentPath.filename() == rootDir) {
+            std::cout << "Found root directory: " << currentPath << std::endl;
             break;
         }
+        currentPath = currentPath.parent_path();
     }
+
+    if (currentPath.filename() != rootDir) {
+        std::cerr << "Root directory not found." << std::endl;
+        return assetFiles;
+    }
+
+    // Search for the asset directory directly under the root directory
+    std::filesystem::path assetPath = currentPath / assetDir;
+    if (!std::filesystem::exists(assetPath) || !std::filesystem::is_directory(assetPath)) {
+        std::cerr << "Assets directory not found in root directory." << std::endl;
+        return assetFiles;
+    }
+
+    // Search for all .png files in the assets directory and its subdirectories
+    try {
+        std::cout << "Searching for .png files in assets directory: " << assetPath << std::endl;
+        for (const auto& file : std::filesystem::recursive_directory_iterator(assetPath)) {
+            if (file.path().extension() == ".png") {
+                assetFiles.push_back(file.path().string());
+            }
+        }
+    } catch (const std::filesystem::filesystem_error& e) {
+        std::cerr << "Filesystem error: " << e.what() << std::endl;
+    }
+
     return assetFiles;
 }
 
-// Function to slice the spritesheet into individual sprites
 void sliceSpritesheet(const std::vector<std::string>& assetFiles, int spriteWidth, int spriteHeight, const std::string& outputDir) {
     for (const auto& assetFile : assetFiles) {
         SDL_Surface* image = IMG_Load(assetFile.c_str());
         if (!image) {
             SDL_Log("Unable to load image: %s", SDL_GetError());
+            continue;
         }
 
         int rows = image->h / spriteHeight;
