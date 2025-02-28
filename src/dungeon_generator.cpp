@@ -7,6 +7,7 @@
 #include <algorithm>
 
 const int MIN_ROOM_SIZE = 5; // Define the minimum room size
+const int MIN_STAIR_AMOUNT = 2; // Define the minimum amount of stairs
 
 struct Node {
     int x, y, width, height;
@@ -62,6 +63,10 @@ void createRooms(Node* node, std::vector<Room>& rooms) {
             int x = node->x + rand() % (node->width - roomWidth);
             int y = node->y + rand() % (node->height - roomHeight);
 
+            // Ensure the room is within bounds
+            x = std::max(1, std::min(x, WIDTH - roomWidth - 2));
+            y = std::max(1, std::min(y, HEIGHT - roomHeight - 2));
+
             node->room = {x, y, roomWidth, roomHeight};
             rooms.push_back(node->room);
         } else {
@@ -84,17 +89,19 @@ void connectRooms(Node* node, std::vector<std::vector<char>>& dungeon) {
         int y2 = rightRoom.y + rightRoom.height / 2;
 
         // Ensure x1, y1, x2, y2 are within bounds
-        x1 = std::max(0, std::min(x1, WIDTH - 1));
-        y1 = std::max(0, std::min(y1, HEIGHT - 1));
-        x2 = std::max(0, std::min(x2, WIDTH - 1));
-        y2 = std::max(0, std::min(y2, HEIGHT - 1));
+        x1 = std::max(1, std::min(x1, WIDTH - 2));
+        y1 = std::max(1, std::min(y1, HEIGHT - 2));
+        x2 = std::max(1, std::min(x2, WIDTH - 2));
+        y2 = std::max(1, std::min(y2, HEIGHT - 2));
 
         while (x1 != x2) {
             dungeon[y1][x1] = FLOOR;
+            if (x1 + 1 < WIDTH - 1) dungeon[y1][x1 + 1] = FLOOR;
             x1 += (x2 > x1) ? 1 : -1;
         }
         while (y1 != y2) {
             dungeon[y1][x1] = FLOOR;
+            if (y1 + 1 < HEIGHT - 1) dungeon[y1 + 1][x1] = FLOOR;
             y1 += (y2 > y1) ? 1 : -1;
         }
 
@@ -117,13 +124,27 @@ void generateWalls(std::vector<std::vector<char>>& dungeon) {
     }
 }
 
+SDL_Texture* getWallTexture(int x, int y, const std::vector<std::vector<char>>& dungeon) {
+    if (y > 0 && dungeon[y - 1][x] == FLOOR) {
+        return wallTextureNorth;
+    } else if (y < HEIGHT - 1 && dungeon[y + 1][x] == FLOOR) {
+        return wallTextureSouth;
+    } else if (x > 0 && dungeon[y][x - 1] == FLOOR) {
+        return wallTextureWest;
+    } else if (x < WIDTH - 1 && dungeon[y][x + 1] == FLOOR) {
+        return wallTextureEast;
+    } else {
+        return wallTextureNorth; // Default to north wall
+    }
+}
+
 std::vector<std::vector<char>> generateDungeon() {
     std::vector<std::vector<char>> dungeon(HEIGHT, std::vector<char>(WIDTH, ' '));
     std::vector<Room> rooms;
     srand(time(0));
 
     // Create the root node
-    Node* root = new Node(0, 0, WIDTH, HEIGHT);
+    Node* root = new Node(1, 1, WIDTH - 2, HEIGHT - 2);
 
     // Split the root node until we can't split anymore
     std::vector<Node*> nodes = {root};
@@ -144,7 +165,10 @@ std::vector<std::vector<char>> generateDungeon() {
     connectRooms(root, dungeon);
 
     // Set start and end points
-    if (!rooms.empty()) {
+    if (rooms.size() >= MIN_STAIR_AMOUNT) {
+        dungeon[rooms[0].y + rooms[0].height / 2][rooms[0].x + rooms[0].width / 2] = START;
+        dungeon[rooms[1].y + rooms[1].height / 2][rooms[1].x + rooms[1].width / 2] = END;
+    } else if (!rooms.empty()) {
         dungeon[rooms[0].y + rooms[0].height / 2][rooms[0].x + rooms[0].width / 2] = START;
         dungeon[rooms.back().y + rooms.back().height / 2][rooms.back().x + rooms.back().width / 2] = END;
     }
@@ -153,6 +177,27 @@ std::vector<std::vector<char>> generateDungeon() {
     generateWalls(dungeon);
 
     return dungeon;
+}
+
+void renderDungeon(SDL_Renderer* renderer, const std::vector<std::vector<char>>& dungeon) {
+    int tileSize = 16;
+
+    for (int y = 0; y < HEIGHT; ++y) {
+        for (int x = 0; x < WIDTH; ++x) {
+            SDL_FRect dstRect = { static_cast<float>(x * tileSize), static_cast<float>(y * tileSize), static_cast<float>(tileSize), static_cast<float>(tileSize) };
+            if (dungeon[y][x] == FLOOR) {
+                SDL_RenderTexture(renderer, floorTexture, NULL, &dstRect);
+            } else if (dungeon[y][x] == WALL) {
+                SDL_Texture* wallTexture = getWallTexture(x, y, dungeon);
+                SDL_RenderTexture(renderer, wallTexture, NULL, &dstRect);
+            } else if (dungeon[y][x] == START || dungeon[y][x] == END) {
+                SDL_RenderTexture(renderer, stairTexture, NULL, &dstRect);
+            } else {
+                // Skip rendering if no valid texture is available
+                continue;
+            }
+        }
+    }
 }
 
 void printDungeon(const std::vector<std::vector<char>>& dungeon) {

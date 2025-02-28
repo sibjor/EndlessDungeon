@@ -39,7 +39,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         if (SDLK_SPACE) {
             // Regenerate dungeon when space key is pressed
             dungeon = generateDungeon();
-        } else if (SDLK_ESCAPE) { /* Not working, this is a bug!!! */
+        } else if (SDLK_ESCAPE) {
             return SDL_APP_SUCCESS;  /* end the program, reporting success to the OS. */
         }
     }
@@ -66,31 +66,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     SDL_RenderTexture(renderer, texture, NULL, &dst);
 
     // Render the dungeon
-    int tileSize = 16;
-
-    for (int y = 0; y < HEIGHT; ++y) {
-        for (int x = 0; x < WIDTH; ++x) {
-            SDL_FRect dstRect = { static_cast<float>(x * tileSize), static_cast<float>(y * tileSize), static_cast<float>(tileSize), static_cast<float>(tileSize) };
-            if (dungeon[y][x] == FLOOR) {
-                SDL_RenderTexture(renderer, floorTexture, NULL, &dstRect);
-            } else if (dungeon[y][x] == WALL) {
-                // Determine which wall texture to use based on surrounding tiles
-                if (y > 0 && dungeon[y - 1][x] == FLOOR) {
-                    SDL_RenderTexture(renderer, wallTextureNorth, NULL, &dstRect);
-                } else if (y < HEIGHT - 1 && dungeon[y + 1][x] == FLOOR) {
-                    SDL_RenderTexture(renderer, wallTextureSouth, NULL, &dstRect);
-                } else if (x > 0 && dungeon[y][x - 1] == FLOOR) {
-                    SDL_RenderTexture(renderer, wallTextureWest, NULL, &dstRect);
-                } else if (x < WIDTH - 1 && dungeon[y][x + 1] == FLOOR) {
-                    SDL_RenderTexture(renderer, wallTextureEast, NULL, &dstRect);
-                } else {
-                    SDL_RenderTexture(renderer, wallTextureNorth, NULL, &dstRect); // Default to north wall
-                }
-            } else if (dungeon[y][x] == START || dungeon[y][x] == END) {
-                SDL_RenderTexture(renderer, stairTexture, NULL, &dstRect);
-            }
-        }
-    }
+    renderDungeon(renderer, dungeon);
 
     SDL_RenderPresent(renderer);
 
