@@ -18,19 +18,19 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-    // Find asset directory and get all .png files
-    std::vector<std::string> assetFiles = findAssetDirectory(".", "EndlessDungeon", "assets");
+    // Find the specific asset file
+    std::string assetFile = findAssetFile(".", "EndlessDungeon", "assets/2D Pixel Dungeon Asset Pack/character and tileset", "Dungeon_Tileset.png");
 
     // Slice the spritesheet with 16px size
-    if (!assetFiles.empty()) {
-        sliceSpritesheet(assetFiles, 16, 16, "sliced_sprites"); // Slice sprites with 16x16 size and export to "sliced_sprites" directory
-        texture = IMG_LoadTexture(renderer, assetFiles[0].c_str());
+    if (!assetFile.empty()) {
+        sliceSpritesheet(assetFile, 16, 16, "assets/sliced_sprites"); // Slice sprites with 16x16 size and export to "assets/sliced_sprites" directory
+        texture = IMG_LoadTexture(renderer, assetFile.c_str());
         if (!texture) {
             SDL_Log("Couldn't load texture: %s\n", SDL_GetError());
             return SDL_APP_FAILURE;
         }
     } else {
-        SDL_Log("No assets found in the directory.");
+        SDL_Log("Asset file not found in the directory.");
         return SDL_APP_FAILURE;
     }
 
