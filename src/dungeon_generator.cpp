@@ -103,6 +103,19 @@ void connectRooms(Node* node, std::vector<std::vector<char>>& dungeon) {
     }
 }
 
+void generateWalls(std::vector<std::vector<char>>& dungeon) {
+    for (int y = 0; y < HEIGHT; ++y) {
+        for (int x = 0; x < WIDTH; ++x) {
+            if (dungeon[y][x] == FLOOR) {
+                if (y > 0 && dungeon[y - 1][x] == WALL) dungeon[y - 1][x] = WALL;
+                if (y < HEIGHT - 1 && dungeon[y + 1][x] == WALL) dungeon[y + 1][x] = WALL;
+                if (x > 0 && dungeon[y][x - 1] == WALL) dungeon[y][x - 1] = WALL;
+                if (x < WIDTH - 1 && dungeon[y][x + 1] == WALL) dungeon[y][x + 1] = WALL;
+            }
+        }
+    }
+}
+
 std::vector<std::vector<char>> generateDungeon() {
     std::vector<std::vector<char>> dungeon(HEIGHT, std::vector<char>(WIDTH, WALL));
     std::vector<Room> rooms;
@@ -134,6 +147,9 @@ std::vector<std::vector<char>> generateDungeon() {
         dungeon[rooms[0].y + rooms[0].height / 2][rooms[0].x + rooms[0].width / 2] = START;
         dungeon[rooms.back().y + rooms.back().height / 2][rooms.back().x + rooms.back().width / 2] = END;
     }
+
+    // Generate walls around the floors
+    generateWalls(dungeon);
 
     return dungeon;
 }

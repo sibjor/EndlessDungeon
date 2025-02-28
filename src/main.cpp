@@ -6,24 +6,11 @@
 #include "tools/sprite-slicer/slicer.h"
 #include "dungeon_generator.h"
 #include "tools/file_utils.h"
+#include "texture_loader.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
-static SDL_Texture *texture = NULL;
-static SDL_Texture *floorTexture = NULL;
-static SDL_Texture *wallTextureNorth = NULL;
-static SDL_Texture *wallTextureSouth = NULL;
-static SDL_Texture *wallTextureEast = NULL;
-static SDL_Texture *wallTextureWest = NULL;
-static SDL_Texture *stairTexture = NULL;
-
-SDL_Texture* loadTexture(const std::string& path) {
-    SDL_Texture* newTexture = IMG_LoadTexture(renderer, path.c_str());
-    if (!newTexture) {
-        SDL_Log("Failed to load texture: %s\n", SDL_GetError());
-    }
-    return newTexture;
-}
+static std::vector<std::vector<char>> dungeon;
 
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
@@ -50,17 +37,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-    // Load textures
-    floorTexture = loadTexture("../../assets/use/floor.png");
-    wallTextureNorth = loadTexture("../../assets/use/wall_north.png");
-    wallTextureSouth = loadTexture("../../assets/use/wall_south.png");
-    wallTextureEast = loadTexture("../../assets/use/wall_east.png");
-    wallTextureWest = loadTexture("../../assets/use/wall_west.png");
-    stairTexture = loadTexture("../../assets/use/stair.png");
-
-    if (!floorTexture || !wallTextureNorth || !wallTextureSouth || !wallTextureEast || !wallTextureWest || !stairTexture) {
+    // Load all textures
+    if (!loadAllTextures(renderer)) {
         return SDL_APP_FAILURE;
     }
+
+    // Generate initial dungeon
+    dungeon = generateDungeon();
 
     return SDL_APP_CONTINUE;
 }
@@ -68,8 +51,15 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 /* This function runs when a new event (mouse input, keypresses, etc) occurs. */
 SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 {
-    if (event->type == SDL_EVENT_KEY_DOWN ||
-        event->type == SDL_EVENT_QUIT) {
+    if (event->type == SDL_EVENT_KEY_DOWN) {
+        if (SDLK_SPACE) {
+            // Regenerate dungeon when space key is pressed
+            dungeon = generateDungeon();
+        }
+    }
+    if (event->type == SDL_EVENT_KEY_DOWN) {
+        if (SDLK_ESCAPE) {
+        }
         return SDL_APP_SUCCESS;  /* end the program, reporting success to the OS. */
     }
     return SDL_APP_CONTINUE;
@@ -95,7 +85,6 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     SDL_RenderTexture(renderer, texture, NULL, &dst);
 
     // Render the dungeon
-    auto dungeon = generateDungeon();
     int tileSize = 16;
 
     for (int y = 0; y < HEIGHT; ++y) {
@@ -130,12 +119,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 /* This function runs once at shutdown. */
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
-    SDL_DestroyTexture(floorTexture);
-    SDL_DestroyTexture(wallTextureNorth);
-    SDL_DestroyTexture(wallTextureSouth);
-    SDL_DestroyTexture(wallTextureEast);
-    SDL_DestroyTexture(wallTextureWest);
-    SDL_DestroyTexture(stairTexture);
+    destroyTextures(); // Destroy all textures from assets/use directory
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }
