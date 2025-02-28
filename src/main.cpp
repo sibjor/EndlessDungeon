@@ -21,22 +21,6 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-    // Find the specific asset file
-    std::string assetFile = findAssetFile("EndlessDungeon", "assets", "Dungeon_Tileset.png");
-
-    // Slice the spritesheet with 16px size
-    if (!assetFile.empty()) {
-        sliceSpritesheet(assetFile, 16, 16, "assets/sliced_sprites"); // Slice sprites with 16x16 size and export to "assets/sliced_sprites" directory
-        texture = IMG_LoadTexture(renderer, assetFile.c_str());
-        if (!texture) {
-            SDL_Log("Couldn't load texture: %s\n", SDL_GetError());
-            return SDL_APP_FAILURE;
-        }
-    } else {
-        SDL_Log("Asset file not found in the directory.");
-        return SDL_APP_FAILURE;
-    }
-
     // Load all textures
     if (!loadAllTextures(renderer)) {
         return SDL_APP_FAILURE;

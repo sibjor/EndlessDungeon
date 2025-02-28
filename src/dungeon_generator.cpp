@@ -1,4 +1,5 @@
 #include "dungeon_generator.h"
+#include "texture_loader.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -107,17 +108,17 @@ void generateWalls(std::vector<std::vector<char>>& dungeon) {
     for (int y = 0; y < HEIGHT; ++y) {
         for (int x = 0; x < WIDTH; ++x) {
             if (dungeon[y][x] == FLOOR) {
-                if (y > 0 && dungeon[y - 1][x] == WALL) dungeon[y - 1][x] = WALL;
-                if (y < HEIGHT - 1 && dungeon[y + 1][x] == WALL) dungeon[y + 1][x] = WALL;
-                if (x > 0 && dungeon[y][x - 1] == WALL) dungeon[y][x - 1] = WALL;
-                if (x < WIDTH - 1 && dungeon[y][x + 1] == WALL) dungeon[y][x + 1] = WALL;
+                if (y > 0 && dungeon[y - 1][x] == ' ') dungeon[y - 1][x] = WALL;
+                if (y < HEIGHT - 1 && dungeon[y + 1][x] == ' ') dungeon[y + 1][x] = WALL;
+                if (x > 0 && dungeon[y][x - 1] == ' ') dungeon[y][x - 1] = WALL;
+                if (x < WIDTH - 1 && dungeon[y][x + 1] == ' ') dungeon[y][x + 1] = WALL;
             }
         }
     }
 }
 
 std::vector<std::vector<char>> generateDungeon() {
-    std::vector<std::vector<char>> dungeon(HEIGHT, std::vector<char>(WIDTH, WALL));
+    std::vector<std::vector<char>> dungeon(HEIGHT, std::vector<char>(WIDTH, ' '));
     std::vector<Room> rooms;
     srand(time(0));
 

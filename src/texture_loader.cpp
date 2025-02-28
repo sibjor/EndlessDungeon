@@ -30,7 +30,7 @@ bool loadAllTextures(SDL_Renderer* renderer) {
     return true;
 }
 
-void destroyTextures(){
+void destroyTextures() {
     SDL_DestroyTexture(floorTexture);
     SDL_DestroyTexture(wallTextureNorth);
     SDL_DestroyTexture(wallTextureSouth);
