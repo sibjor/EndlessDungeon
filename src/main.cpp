@@ -51,12 +51,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     }
 
     // Load textures
-    floorTexture = loadTexture("../../assets/use/floor.png");
-    wallTextureNorth = loadTexture("../../assets/use/wall_north.png");
-    wallTextureSouth = loadTexture("../../assets/use/wall_south.png");
-    wallTextureEast = loadTexture("../../assets/use/wall_east.png");
-    wallTextureWest = loadTexture("../../assets/use/wall_west.png");
-    stairTexture = loadTexture("../../assets/use/stair.png");
+    floorTexture = loadTexture("assets/use/floor.png");
+    wallTextureNorth = loadTexture("assets/use/wall_north.png");
+    wallTextureSouth = loadTexture("assets/use/wall_south.png");
+    wallTextureEast = loadTexture("assets/use/wall_east.png");
+    wallTextureWest = loadTexture("assets/use/wall_west.png");
+    stairTexture = loadTexture("assets/use/stair.png");
 
     if (!floorTexture || !wallTextureNorth || !wallTextureSouth || !wallTextureEast || !wallTextureWest || !stairTexture) {
         return SDL_APP_FAILURE;
