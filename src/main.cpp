@@ -15,6 +15,7 @@ static SDL_Texture *wallTextureNorth = NULL;
 static SDL_Texture *wallTextureSouth = NULL;
 static SDL_Texture *wallTextureEast = NULL;
 static SDL_Texture *wallTextureWest = NULL;
+static SDL_Texture *stairTexture = NULL;
 
 SDL_Texture* loadTexture(const std::string& path) {
     SDL_Texture* newTexture = IMG_LoadTexture(renderer, path.c_str());
@@ -50,13 +51,14 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     }
 
     // Load textures
-    floorTexture = loadTexture("assets/sliced_sprites/sprite_0_0.png");
-    wallTextureNorth = loadTexture("assets/sliced_sprites/sprite_0_1.png");
-    wallTextureSouth = loadTexture("assets/sliced_sprites/sprite_0_2.png");
-    wallTextureEast = loadTexture("assets/sliced_sprites/sprite_0_3.png");
-    wallTextureWest = loadTexture("assets/sliced_sprites/sprite_0_4.png");
+    floorTexture = loadTexture("../../assets/use/floor.png");
+    wallTextureNorth = loadTexture("../../assets/use/wall_north.png");
+    wallTextureSouth = loadTexture("../../assets/use/wall_south.png");
+    wallTextureEast = loadTexture("../../assets/use/wall_east.png");
+    wallTextureWest = loadTexture("../../assets/use/wall_west.png");
+    stairTexture = loadTexture("../../assets/use/stair.png");
 
-    if (!floorTexture || !wallTextureNorth || !wallTextureSouth || !wallTextureEast || !wallTextureWest) {
+    if (!floorTexture || !wallTextureNorth || !wallTextureSouth || !wallTextureEast || !wallTextureWest || !stairTexture) {
         return SDL_APP_FAILURE;
     }
 
@@ -131,6 +133,7 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     SDL_DestroyTexture(wallTextureSouth);
     SDL_DestroyTexture(wallTextureEast);
     SDL_DestroyTexture(wallTextureWest);
+    SDL_DestroyTexture(stairTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }
