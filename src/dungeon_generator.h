@@ -3,9 +3,8 @@
 
 #include <vector>
 
-const int WIDTH = 50;
-const int HEIGHT = 50;
-const char EMPTY = ' ';
+const int WIDTH = 80;  // Width of the dungeon
+const int HEIGHT = 45; // Height of the dungeon
 const char WALL = '#';
 const char FLOOR = '.';
 const char START = 'S';

@@ -5,7 +5,7 @@
 #include <SDL3_image/SDL_image.h>
 #include "tools/sprite-slicer/slicer.h"
 #include "dungeon_generator.h"
-#include "tools/file_utils.h"  // Include the file_utils.h header
+#include "tools/file_utils.h"
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
@@ -51,12 +51,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     }
 
     // Load textures
-    floorTexture = loadTexture("assets/use/floor.png");
-    wallTextureNorth = loadTexture("assets/use/wall_north.png");
-    wallTextureSouth = loadTexture("assets/use/wall_south.png");
-    wallTextureEast = loadTexture("assets/use/wall_east.png");
-    wallTextureWest = loadTexture("assets/use/wall_west.png");
-    stairTexture = loadTexture("assets/use/stair.png");
+    floorTexture = loadTexture("../../assets/use/floor.png");
+    wallTextureNorth = loadTexture("../../assets/use/wall_north.png");
+    wallTextureSouth = loadTexture("../../assets/use/wall_south.png");
+    wallTextureEast = loadTexture("../../assets/use/wall_east.png");
+    wallTextureWest = loadTexture("../../assets/use/wall_west.png");
+    stairTexture = loadTexture("../../assets/use/stair.png");
 
     if (!floorTexture || !wallTextureNorth || !wallTextureSouth || !wallTextureEast || !wallTextureWest || !stairTexture) {
         return SDL_APP_FAILURE;
@@ -116,6 +116,8 @@ SDL_AppResult SDL_AppIterate(void *appstate)
                 } else {
                     SDL_RenderTexture(renderer, wallTextureNorth, NULL, &dstRect); // Default to north wall
                 }
+            } else if (dungeon[y][x] == START || dungeon[y][x] == END) {
+                SDL_RenderTexture(renderer, stairTexture, NULL, &dstRect);
             }
         }
     }
