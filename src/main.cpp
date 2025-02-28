@@ -55,12 +55,9 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         if (SDLK_SPACE) {
             // Regenerate dungeon when space key is pressed
             dungeon = generateDungeon();
+        } else if (SDLK_ESCAPE) { /* Not working, this is a bug!!! */
+            return SDL_APP_SUCCESS;  /* end the program, reporting success to the OS. */
         }
-    }
-    if (event->type == SDL_EVENT_KEY_DOWN) {
-        if (SDLK_ESCAPE) {
-        }
-        return SDL_APP_SUCCESS;  /* end the program, reporting success to the OS. */
     }
     return SDL_APP_CONTINUE;
 }
