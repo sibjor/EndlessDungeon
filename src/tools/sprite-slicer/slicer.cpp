@@ -5,45 +5,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include "slicer.h"
-
-std::string findAssetFile(const std::string& startDir, const std::string& rootDir, const std::string& assetDir, const std::string& fileName) {
-    std::filesystem::path currentPath = std::filesystem::absolute(startDir);
-
-    // Search upwards for the root directory
-    while (currentPath != currentPath.root_path()) {
-        if (currentPath.filename() == rootDir) {
-            std::cout << "Found root directory: " << currentPath << std::endl;
-            break;
-        }
-        currentPath = currentPath.parent_path();
-    }
-
-    if (currentPath.filename() != rootDir) {
-        std::cerr << "Root directory not found." << std::endl;
-        return "";
-    }
-
-    // Search for the asset directory directly under the root directory
-    std::filesystem::path assetPath = currentPath / assetDir;
-    if (!std::filesystem::exists(assetPath) || !std::filesystem::is_directory(assetPath)) {
-        std::cerr << "Assets directory not found in root directory." << std::endl;
-        return "";
-    }
-
-    // Search for the specific file in the assets directory and its subdirectories
-    try {
-        std::cout << "Searching for file " << fileName << " in assets directory: " << assetPath << std::endl;
-        for (const auto& file : std::filesystem::recursive_directory_iterator(assetPath)) {
-            if (file.path().filename() == fileName) {
-                return file.path().string();
-            }
-        }
-    } catch (const std::filesystem::filesystem_error& e) {
-        std::cerr << "Filesystem error: " << e.what() << std::endl;
-    }
-
-    return "";
-}
+#include "../file_utils.h"  // Include the file_utils.h header
 
 bool compareSurfaces(SDL_Surface* surface1, SDL_Surface* surface2) {
     if (surface1->w != surface2->w || surface1->h != surface2->h) {

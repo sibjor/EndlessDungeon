@@ -1,6 +1,6 @@
 # Endless Dungeon To-Do List
 
-- [ ] If necessary, make a spritesheet slicer
+- [ ] 
 
 ## Done
 - [x] Add .gitignore
@@ -9,3 +9,5 @@
 - [x] Build SDL3 and SDL3_image test project with emscripten
 - [x] Create a simple server in Go
 - [x] Find assets 
+- [x] If necessary, make a spritesheet slicer
+- [x] Manually rename exported sprites

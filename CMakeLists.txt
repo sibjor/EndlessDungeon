@@ -16,7 +16,7 @@ if(EMSCRIPTEN)
 endif()
 
 # Create your game executable target as usual
-add_executable(EndlessDungeon src/main.cpp src/tools/sprite-slicer/slicer.cpp)
+add_executable(EndlessDungeon src/main.cpp src/tools/file_utils.cpp src/dungeon_generator.cpp src/tools/sprite-slicer/slicer.cpp)
 
 # Link to the actual SDL3 library
 target_link_libraries(EndlessDungeon PRIVATE SDL3_image::SDL3_image SDL3::SDL3)
