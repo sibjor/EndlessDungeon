@@ -2,8 +2,12 @@
 
 - [ ] Re-arrange repo
 - [ ] Adjust CMakeLists
-- [ ] Complete game_wrapper logic
-- [ ] Run the server
+- [ ] Finish game_wrapper logic
+- [ ] Complete server logic in C
+- [ ] Rewrite build steps in README
+- [ ] Rewrite file_utils in C
+- [ ] Finish dungeon_generator in C++
+
 
 ## Done
 - [x] Add .gitignore

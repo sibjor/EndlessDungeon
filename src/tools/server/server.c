@@ -1,6 +1,7 @@
 #include "server.h"
+#include <stddef.h>
 
-struct Metadata {
+struct Metadata{
     char* dateTime;
     char* assetsDir;
     char* spritesheetPath;
@@ -21,21 +22,19 @@ struct Metadata {
     Check if metadata is correct
     If not, return error
     If correct, return TRUE
-*/ 
-void initServer(){
-    struct Metadata metadata;
-    if (!getMetadata == FALSE){
-        setMetadata(TRUE);
-    }
-}
-/*
-    getMetadata():
-
-    Check metadata for output directories and files of assets
-    Check if metadata is correct
-    If not, return error
-    If correct, return TRUE
 */
+
+struct Metadata* metadata;
+
+void initServer(){
+    getMetadata();
+    if(metadata == NULL){
+        setMetadata();
+    }
+    initAssets();
+    buildWASM();
+    hostGame();
+}
 /*
     runServer():
 
@@ -49,8 +48,16 @@ void initServer(){
     If error, return error
 */
 void runServer(){
-
+    struct Metadata* metadata;
 }
+/*
+    getMetadata():
+
+    Check metadata for output directories and files of assets
+    Check if metadata is correct
+    If not, return error
+    If correct, return TRUE
+*/
 void getMetadata(){
     
 }
@@ -90,8 +97,8 @@ void buildWASM(){
     If successful, return TRUE
     If error, return error
 */
-void setMetadata(int shouldCreateNew){
-
+void setMetadata(){
+    metadata = malloc(sizeof(struct Metadata)); // Allocate memory for struct Metadata
 }
 /*
     hostGame():
