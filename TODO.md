@@ -1,12 +1,10 @@
 # Endless Dungeon To-Do List
 
-- [ ] Re-arrange repo
-- [ ] Adjust CMakeLists
-- [ ] Finish game_wrapper logic
 - [ ] Complete server logic in C
-- [ ] Rewrite build steps in README
 - [ ] Rewrite file_utils in C
 - [ ] Finish dungeon_generator in C++
+- [ ] Finish game_wrapper logic
+- [ ] Rewrite build steps in README
 
 
 ## Done
@@ -18,3 +16,7 @@
 - [x] Find assets 
 - [x] If necessary, make a spritesheet slicer
 - [x] Manually rename exported sprites
+
+4-5 mar
+- [x] Re-arrange repo
+- [x] Adjust CMakeLists
