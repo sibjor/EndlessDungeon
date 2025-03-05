@@ -1,18 +1,32 @@
 #include "server.h"
 
-
+struct Metadata {
+    char* dateTime;
+    char* assetsDir;
+    char* spritesheetPath;
+    char* slicedSpritesheetPath;
+    char* wasmDir;
+    char* clientDir;
+    char* serverDir;
+    char* metadataPath;
+    char* metadataFileName;
+    int port;
+};
 /*
     initServer():
 
     Don't open any ports
-    Just start the server
+    - Just start the server
     Check metadata for output directories and files of assets
     Check if metadata is correct
     If not, return error
     If correct, return TRUE
 */ 
 void initServer(){
-
+    struct Metadata metadata;
+    if (!getMetadata == FALSE){
+        setMetadata(TRUE);
+    }
 }
 /*
     getMetadata():
@@ -37,12 +51,14 @@ void initServer(){
 void runServer(){
 
 }
-void GetMetadata(){
+void getMetadata(){
     
 }
 /*
     initAssets():
 
+    Check if metadata.json exists
+    If not, create it with setMetadata()
     Check metadata for output directories and files of assets
     Check if metadata is correct
     If not, return error
@@ -66,12 +82,15 @@ void buildWASM(){
 }
 /*
     setMetadata()
+
+    If shouldCreateNew is TRUE:
+    Create the metadata.json file
     Add the new path to metadata
     Remove the old path from metadata
     If successful, return TRUE
     If error, return error
 */
-void setMetadata(){
+void setMetadata(int shouldCreateNew){
 
 }
 /*
