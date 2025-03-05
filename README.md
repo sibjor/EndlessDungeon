@@ -4,6 +4,7 @@
 - Issued by teacher Sebastan Jensen at Forsbergs game programming school Stockholm/Sweden
 - Please build to generate compile_commands.json
 - Deletion of /build can be necessary between cmake configurations
+- Server in Go was changed to C
 
 ```bash
 # Fetch and build
@@ -11,20 +12,17 @@ mkdir sibjor
 cd sibjor
 git clone https://github.com/sibjor/EndlessDungeon.git
 cd EndlessDungeon
+git submodule update --init --recursive
 cmake -S . -B build
 cmake --build build
 ```
 ```bash
-# Build for the web
+# Build for the web (will automatically do so in the script below)
 emcmake cmake -S . -B build-web
 emmake make -C build-web
 ```
 ```bash
-# Build and host web-build on port 8888
-cd tools
-cd server
-go build -o server server.go
-./server
+# Run server to host web build
 ```
 
 Generating procedural content has always been an important part of game programming: generating assets programmatically saves time and space and allows us to do more with less. However, since the days of the original Rogue, games based on the premise of procedural generation have also become a popular genre of its own because it opens up a game design space rife with possibilities for creativity.

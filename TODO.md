@@ -1,6 +1,9 @@
 # Endless Dungeon To-Do List
 
-- [ ] 
+- [ ] Re-arrange repo
+- [ ] Adjust CMakeLists
+- [ ] Complete game_wrapper logic
+- [ ] Run the server
 
 ## Done
 - [x] Add .gitignore
