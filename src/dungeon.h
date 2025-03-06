@@ -1,6 +1,16 @@
 #ifndef DUNGEON_GENERATOR_H
 #define DUNGEON_GENERATOR_H
 
+#define EAST = "EAST";
+#define WEST = "WEST";
+#define NORTH = "NORTH";
+#define SOUTH = "SOUTH";
+#define NORTHEAST = "NORTHEAST";
+#define SOUTHEAST = "SOUTHEAST";
+#define NORTHWEST = "NORTHWEST";
+#define SOUTHWEST = "SOUTHWEST";
+
+
 #include <vector>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
@@ -20,6 +30,7 @@ struct Tile
     char type;
     int posX;
     int posY;
+
 };
 
 class FirstFloor : public Dungeon
@@ -53,10 +64,6 @@ public:
 private:
 
     Tile tiles[10][10];
-    int posX; // Position X
-    int posY; // Position Y
-    int stairPosX;
-    int stairPosY;
 };
 
 #endif
