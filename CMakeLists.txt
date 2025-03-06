@@ -7,12 +7,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(SOURCES
   # C++
     src/main.cpp
-    src/dungeon_generator.cpp
-    src/game_wrapper.cpp
+    src/game.cpp
+    src/dungeon.cpp
   # C
-    src/utils/dir_utils.c
-    src/utils/file_utils.c
+    src/utils/path_utils.c
     src/utils/texture_loader.c
+    src/utils/random.c
     src/tools/spritesheet/slicer.c
 )
 
@@ -28,7 +28,7 @@ if(SERVER)
 
   # Server Executable
   add_executable(EndlessDungeonServer ${SOURCES})
-  target_link_libraries(EndlessDungeonServer PRIVATE CURL::libcurl SDL3_image::SDL3_image SDL3::SDL3)
+  target_link_libraries(EndlessDungeonServer SDL3_image::SDL3_image SDL3::SDL3)
   set_target_properties(EndlessDungeonServer PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build-server")
 
   # Copy compile_commands.json to root directory if different
@@ -82,4 +82,3 @@ endif()
 
 add_subdirectory(SDL EXCLUDE_FROM_ALL)
 add_subdirectory(SDL_image EXCLUDE_FROM_ALL)
-add_subdirectory(libcurl EXCLUDE_FROM_ALL)
