@@ -1,18 +1,33 @@
 #include "server.h"
 #include <stddef.h>
 
-struct Metadata{
-    char* dateTime;
-    char* assetsDir;
-    char* spritesheetPath;
-    char* slicedSpritesheetPath;
-    char* wasmDir;
-    char* clientDir;
-    char* serverDir;
-    char* metadataPath;
-    char* metadataFileName;
+struct Terminal {
+    char* status;
+    char* command;
+    char* output;
+    char currentPath;
+};
+
+struct Metadata
+{
+    char *dateTime;
+    char *assetsDir;
+    char *spritesheetPath;
+    char *slicedSpritesheetPath;
+    char *wasmDir;
+    char *clientDir;
+    char *serverDir;
+    char *metadataPath;
     int port;
 };
+
+void initTerminal(){
+    struct Terminal *terminal = malloc(sizeof(struct Terminal));
+    terminal->status = "Ready";
+    terminal->command = "ls";
+    terminal->output = " ";
+    terminal->currentPath = " ";
+}
 /*
     initServer():
 
@@ -24,17 +39,8 @@ struct Metadata{
     If correct, return TRUE
 */
 
-struct Metadata* metadata;
+struct Metadata *metadata;
 
-void initServer(){
-    getMetadata();
-    if(metadata == NULL){
-        setMetadata();
-    }
-    initAssets();
-    buildWASM();
-    hostGame();
-}
 /*
     runServer():
 
@@ -47,19 +53,9 @@ void initServer(){
     If successful, return TRUE
     If error, return error
 */
-void runServer(){
-    struct Metadata* metadata;
-}
-/*
-    getMetadata():
-
-    Check metadata for output directories and files of assets
-    Check if metadata is correct
-    If not, return error
-    If correct, return TRUE
-*/
-void getMetadata(){
-    
+void runServer()
+{
+    struct Metadata *metadata;
 }
 /*
     initAssets():
@@ -71,45 +67,19 @@ void getMetadata(){
     If not, return error
     If correct, return TRUE
 */
-void initAssets(){
-
-}
-/*
-    buildWASM():
-
-    Check metadata for output directories and files of assets and WASM
-    Check if metadata and the above files are correct
-    If not, return error
-    If correct, build the WASM file with emscripten in a shell command
-    If successful, return TRUE
-    If error, return error
-*/
-void buildWASM(){
-
-}
-/*
-    setMetadata()
-
-    If shouldCreateNew is TRUE:
-    Create the metadata.json file
-    Add the new path to metadata
-    Remove the old path from metadata
-    If successful, return TRUE
-    If error, return error
-*/
-void setMetadata(){
-    metadata = malloc(sizeof(struct Metadata)); // Allocate memory for struct Metadata
+void initAssets()
+{
 }
 /*
     hostGame():
 
     If previous functions are successful:
-    
+
     Open ports
     Host the web_build directory
     If successful, return TRUE
     If error, return error
 */
-void hostGame(){
-
+void hostGame()
+{
 }

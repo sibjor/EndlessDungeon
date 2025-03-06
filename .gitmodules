@@ -4,9 +4,3 @@
 [submodule "SDL_image"]
 	path = SDL_image
 	url = https://github.com/libsdl-org/SDL_image.git
-[submodule "emsdk"]
-	path = emsdk
-	url = https://github.com/emscripten-core/emsdk.git
-[submodule "libcurl"]
-	path = libcurl
-	url = https://github.com/curl/curl.git

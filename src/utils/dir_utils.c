@@ -9,9 +9,9 @@ char* findProjectRoot(){
     // Finds the directory containing the top .git folder
 };
 void navigateTo(const char* path);
-void navigateToRoot();
+void navigateToProjectRoot();
 void navigateToParent(int levels);
 void navigateBack();
 void getOutputDir(const char* path);
 void setOutputDir(const char* path);
-void createDirectory(const char* path);
+void createPath(const char* path);

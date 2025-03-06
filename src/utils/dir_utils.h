@@ -19,9 +19,9 @@ char* projectRoot;
 void setProjectRoot(const char* path);
 char* getProjectRoot(){return projectRoot;};
 void navigateTo(const char* path);
-void navigateToRoot();
+void navigateToProjectRoot();
 void navigateToParent(int levels);
 void navigateBack();
-void createDirectory(const char* path);
+void createPath(const char* path);
 
 #endif
