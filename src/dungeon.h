@@ -1,10 +1,6 @@
 #ifndef DUNGEON_GENERATOR_H
 #define DUNGEON_GENERATOR_H
 
-#define DUNGEON_WIDTH 100
-#define DUNGEON_HEIGHT 100
-#define CORRIDOR_WIDTH 3
-
 #include <vector>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
@@ -19,11 +15,22 @@ const char FLOOR = 'FL';
 const char STAIR_UP = 'SU';
 const char STAIR_DOWN = 'SD';
 
+struct Tile
+{
+    char type;
+    int posX;
+    int posY;
+};
+
 class FirstFloor : public Dungeon
 {
 public:
     FirstFloor();
     ~FirstFloor();
+
+private:
+    int roomCount;
+    std::vector<Room> rooms;
 };
 
 class Dungeon
@@ -33,26 +40,23 @@ public:
     ~Dungeon();
 
 private:
-    int width;
-    int height;
+    int roomCount;
     std::vector<Room> rooms;
 };
 
 class Room
-    {
-    public:
-        Room();
-        ~Room();
+{
+public:
+    Room();
+    ~Room();
 
-    private:
-        bool isFirst; // If true then it should have stairs up
-        bool isAny;   // If true then it should not have stairs
-        bool isLast;  // If true then it should have stairs down
+private:
 
-        int width;
-        int height;
-        int posX; // Position X
-        int posY; // Position Y
-    };
+    Tile tiles[10][10];
+    int posX; // Position X
+    int posY; // Position Y
+    int stairPosX;
+    int stairPosY;
+};
 
 #endif
