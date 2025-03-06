@@ -7,5 +7,9 @@ class Game{
         
     private:
         std::vector<Dungeon> dungeons;
-        std::vector<Room> rooms;
+
+};
+
+struct SaveData{
+    static std::vector<int> saveFiles;
 };

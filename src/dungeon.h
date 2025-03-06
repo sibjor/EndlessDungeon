@@ -10,7 +10,6 @@
 #define NORTHWEST = "NORTHWEST";
 #define SOUTHWEST = "SOUTHWEST";
 
-
 #include <vector>
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
@@ -25,33 +24,16 @@ const char FLOOR = 'FL';
 const char STAIR_UP = 'SU';
 const char STAIR_DOWN = 'SD';
 
-struct Tile
-{
-    char type;
-    int posX;
-    int posY;
-
-};
-
-class FirstFloor : public Dungeon
-{
-public:
-    FirstFloor();
-    ~FirstFloor();
-
-private:
-    int roomCount;
-    std::vector<Room> rooms;
-};
-
 class Dungeon
 {
 public:
     Dungeon();
     ~Dungeon();
+    void createFirstFloor();
+    void createDungeon();
+    void drawDungeon(SDL_Renderer *renderer);
 
 private:
-    int roomCount;
     std::vector<Room> rooms;
 };
 
@@ -62,8 +44,20 @@ public:
     ~Room();
 
 private:
-
     Tile tiles[10][10];
+};
+
+class Tile
+{
+public:
+    Tile();
+    ~Tile();
+    char type;
+    int posX;
+    int posY;
+
+private:
+
 };
 
 #endif

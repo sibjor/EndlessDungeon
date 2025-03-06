@@ -1,41 +1,26 @@
 #include "dungeon.h"
 #include "random.h"
 
-struct Tile
+Dungeon::Dungeon()
 {
-    char type;
-    int posX;
-    int posY;
-};
-
-FirstFloor::FirstFloor(){
     // Constructor
-    roomCount = random(5, 10);
-    for (int i = 0; i < roomCount; i++)
-    {
-        Room room = Room();
-        rooms.push_back(room);
-    }
+
+    // Add metadata to save file (not implemented)
 }
 
-Dungeon::Dungeon(){
+Room::Room()
+{
     // Constructor
-    roomCount = random(5, 10);
-    for (int i = 0; i < roomCount; i++)
-    {
-        Room room = Room();
-        rooms.push_back(room);
-    }
-}
 
-Room::Room(){
-    // Constructor
-    int value = random(5,10);
-    for (int i = 0; i < value; i++)
+    for (int i = 0; i < random(5, 10); i++)
     {
-        for (int j = 0; j < value; j++)
+        for (int j = 0; j < random(5, 10); j++)
         {
             Tile tile = Tile();
+            // Implement logic to set compass based on adjacent tiles
+            if (tile.hasAdjacentBlank){
+                
+            }
             tile.posX = i;
             tile.posY = j;
             tiles[i][j] = tile;
