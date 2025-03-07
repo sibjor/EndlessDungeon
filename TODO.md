@@ -1,6 +1,6 @@
 # Endless Dungeon To-Do List
 
-- [ ] Complete server again in Go
+- [ ] Complete server again in Go or C
 - [ ] Finish metadata framework (tilemap)
 - [ ] Rewrite build steps in README
 

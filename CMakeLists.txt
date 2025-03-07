@@ -10,16 +10,19 @@ set(SOURCES
     src/game.cpp
     src/dungeon.cpp
   # C
-    src/utils/path_utils.c
+    src/utils/path_utils.cpp
     src/utils/texture_loader.c
     src/utils/random.c
     src/tools/spritesheet/slicer.c
+    
 )
 
 if(SERVER)
   # Server-specific source files
   list(APPEND SOURCES
+  # C
     src/tools/server/server.c
+    src/tools/server/metadata.h
   )
   
   # Set the output directory for built objects.

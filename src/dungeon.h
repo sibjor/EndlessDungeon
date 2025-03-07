@@ -31,7 +31,6 @@ public:
     ~Dungeon();
     void createFirstFloor();
     void createDungeon();
-    void drawDungeon(SDL_Renderer *renderer);
 
 private:
     std::vector<Room> rooms;
@@ -42,6 +41,7 @@ class Room
 public:
     Room();
     ~Room();
+    void generateRoom();
 
 private:
     Tile tiles[10][10];
@@ -55,6 +55,7 @@ public:
     char type;
     int posX;
     int posY;
+    bool hasAdjacentBlank;
 
 private:
 

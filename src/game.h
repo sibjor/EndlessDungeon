@@ -7,7 +7,7 @@ class Game{
         
     private:
         std::vector<Dungeon> dungeons;
-
+        
 };
 
 struct SaveData{
