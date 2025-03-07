@@ -1,11 +1,7 @@
 # Endless Dungeon To-Do List
 
-- [ ] Complete server logic in C
-- [ ] Rewrite and finish file_utils in C
-- [ ] Finish terminal prototype in C
-- [ ] Finish dir_utils in C
-- [ ] Finish dungeon_generator in C++
-- [ ] Finish game_wrapper logic
+- [ ] Complete server again in Go
+- [ ] Finish metadata framework (tilemap)
 - [ ] Rewrite build steps in README
 
 
