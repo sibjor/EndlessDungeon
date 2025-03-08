@@ -3,7 +3,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
-#include "tools/sprite-slicer/slicer.h"
+#include "slicer.h"
 #include "dungeon_generator.h"
 #include "tools/file_utils.h"
 #include "texture_loader.h"

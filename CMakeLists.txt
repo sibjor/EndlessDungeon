@@ -13,9 +13,6 @@ set(SOURCES
   src/utils/random.cpp
 )
 
-# Spritesheet slicer executable
-add_executable(SpritesheetSlicer src/tools/spritesheet/slicer.c)
-
 # Client Executable
 add_executable(EndlessDungeon ${SOURCES})
 target_link_libraries(EndlessDungeon PRIVATE SDL3::SDL3 SDL3_image::SDL3_image)
