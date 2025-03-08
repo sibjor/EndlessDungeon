@@ -7,6 +7,5 @@ struct Metadata
 
 void setMetadata(struct Metadata *metadata)
 {
-    
-    metadata->metadataPath = "metadata.json";
+
 }
