@@ -1,3 +1,20 @@
+// Allowed path for projects
+#define PROJECTS_PATH "Dokument"
+
+// Security functions
+bool AllowedPath(const char* path);
+
+// Navigation functions
+void ChangeDirectory(const char* directory);
+void NavigateToPreviousDirectory();
+void GetCurrentDirectory();
+void GetParentDirectory(const char* directory);
+void GetRootDirectory(const char* projectRootDirectory);
+
+// Location functions
+void GetRelativePath(const char* path);
+void GetAbsolutePath(const char* path);
+
 // Directory functions
 void ListDirectories(const char* directory);
 void CreateDirectory(const char* directory);

@@ -10,8 +10,9 @@ set(SOURCES
     src/game.cpp
     src/dungeon.cpp
     src/tools/metadata.cpp
-  # C
+    src/tools/install.cpp
     src/utils/path_utils.cpp
+  # C
     src/utils/texture_loader.c
     src/utils/random.c
     src/tools/spritesheet/slicer.c
