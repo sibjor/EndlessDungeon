@@ -9,6 +9,7 @@ set(SOURCES
     src/main.cpp
     src/game.cpp
     src/dungeon.cpp
+    src/tools/metadata.cpp
   # C
     src/utils/path_utils.cpp
     src/utils/texture_loader.c
@@ -22,7 +23,6 @@ if(SERVER)
   list(APPEND SOURCES
   # C
     src/tools/server/server.c
-    src/tools/server/metadata.h
   )
   
   # Set the output directory for built objects.

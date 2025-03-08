@@ -1,7 +1,3 @@
-#define PROJECT_ROOT_PATH "EndlessDungeon"
-#define PROJECT_RAW_ASSETS_PATH PROJECT_ROOT_PATH "/assets"
-#define PROJECT_DATA_PATH PROJECT_ROOT_PATH "/data"
-
 // Directory functions
 void ListDirectories(const char* directory);
 void CreateDirectory(const char* directory);
