@@ -9,41 +9,81 @@
   including commercial applications, and to alter it and redistribute it
   freely.
 */
-#define SDL_MAIN_USE_CALLBACKS 1  /* use the callbacks instead of main() */
+#define SDL_MAIN_USE_CALLBACKS 1  /* use the callbacks instead of main() for web compatibility */
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
-#include <filesystem>
 #include <vector>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+
+struct TextureInfo {
+    SDL_Texture* texture;
+    SDL_FRect position;
+};
 
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
-static SDL_Texture *texture = NULL;
-static std::vector<SDL_Texture*> textures;
+static std::vector<TextureInfo> textures = {
+    
+};
+
+const int tileSize = 16; // Assuming each texture is 16x16 pixels
+const float padding = 2.0f; // Padding between tiles
+const int mapWidth = tileSize * 26;
+const int mapHeight = tileSize * 21;
+
+/* List of hard-coded asset file paths */
+std::vector<std::string> assetFiles = {
+    "Debug/assets/chest.png",
+    "Debug/assets/door_left.png",
+    "Debug/assets/door_left2.png",
+    "Debug/assets/door_right.png",
+    "Debug/assets/door_right2.png",
+    "Debug/assets/floor.png",
+    "Debug/assets/key.png",
+    "Debug/assets/key2.png",
+    "Debug/assets/stair.png",
+    "Debug/assets/wall_east.png",
+    "Debug/assets/wall_north.png",
+    "Debug/assets/wall_south.png",
+    "Debug/assets/wall_west.png",
+    // Add more file paths as needed
+};
 
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
     /* Create the window */
-    if (!SDL_CreateWindowAndRenderer("EndlessDungeon", 800, 600, SDL_WINDOW_FULLSCREEN, &window, &renderer)) {
+    if (!SDL_CreateWindowAndRenderer("EndlessDungeon", 1280, 1024, SDL_WINDOW_FULLSCREEN, &window, &renderer)) {
         SDL_Log("Couldn't create window and renderer: %s\n", SDL_GetError());
         return SDL_APP_FAILURE;
     }
 
-    /* Load all PNG files from the assets directory */
-    std::string basePath(SDL_GetBasePath());
-    std::string assetsPath = basePath + "Debug/assets/";
 
-    for (const auto &entry : std::filesystem::directory_iterator(assetsPath)) {
-        if (entry.path().extension() == ".png") {
-            SDL_Texture *tex = IMG_LoadTexture(renderer, entry.path().string().c_str());
-            if (!tex) {
-                SDL_Log("Couldn't load texture %s: %s\n", entry.path().string().c_str(), SDL_GetError());
-                return SDL_APP_FAILURE;
-            }
-            textures.push_back(tex);
+    /*  Load each texture from the specified file paths 
+        Next steps: Generate procedually possibly with if - statements
+        Those if:s (or switch) could verify adjacent tiles
+        A min-max value of certain adjacent tile type:s (textures)
+        - could set an un-symmetrical dungeon generation
+        - with the walls always on the end, stair minimum 2 etc*/
+    for (const std::string& filePath : assetFiles) { // Range-based for loop
+        TextureInfo texInfo;
+        texInfo.texture = IMG_LoadTexture(renderer, filePath.c_str());
+        if (!texInfo.texture) {
+            SDL_Log("Couldn't load texture %s: %s\n", filePath.c_str(), SDL_GetError());
+            return SDL_APP_FAILURE;
         }
+        texInfo.position = {0, 0, 0, 0}; // Initialize position, this will be generated procedurally
+        textures.push_back(texInfo);
     }
+
+    /* Seed the random number generator */
+    std::srand(std::time(nullptr));
+
+    /* Generate the dungeon map */
+    GenerateDungeonMap();
 
     return SDL_APP_CONTINUE;
 }
@@ -62,35 +102,16 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
     int w = 0, h = 0;
-    SDL_FRect dst;
-    const float scale = 4.0f;
-    const float padding = 10.0f; // Padding between textures
+    const float scale = 1.0f;
 
     /* Clear the screen */
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    /* Get the render output size */
-    SDL_GetRenderOutputSize(renderer, &w, &h);
-
     /* Render each texture */
-    float x = padding;
-    float y = padding;
-    for (SDL_Texture* tex : textures) {
+    for (TextureInfo& texInfo : textures) {
         SDL_SetRenderScale(renderer, scale, scale);
-        SDL_GetTextureSize(tex, &dst.w, &dst.h);
-        dst.x = x;
-        dst.y = y;
-
-        /* Draw the texture */
-        SDL_RenderTexture(renderer, tex, NULL, &dst);
-
-        /* Update position for the next texture */
-        x += dst.w + padding;
-        if (x + dst.w + padding > w / scale) {
-            x = padding;
-            y += dst.h + padding;
-        }
+        SDL_RenderTexture(renderer, texInfo.texture, NULL, &texInfo.position);
     }
 
     /* Present the renderer */
@@ -102,4 +123,21 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 /* This function runs once at shutdown. */
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
+    for (TextureInfo& texInfo : textures) {
+        SDL_DestroyTexture(texInfo.texture);
+    }
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+}
+
+/* Function to generate the dungeon map */
+void GenerateDungeonMap()
+{
+    for (int y = 0; y < mapHeight; ++y) {
+        for (int x = 0; x < mapWidth; ++x) {
+            int tileIndex = std::rand() % textures.size();
+            SDL_FRect position = { x * tileSize + padding, y * tileSize + padding, tileSize, tileSize };
+            textures[tileIndex].position = position;
+        }
+    }
 }
