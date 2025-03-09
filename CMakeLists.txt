@@ -8,7 +8,6 @@ file(GLOB ASSET_FILES "assets/use/*.png")
 
 set(SOURCES
   src/main.cpp
-  src/metadata.c
 )
 
 # Client Executable
