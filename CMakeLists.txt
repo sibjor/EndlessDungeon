@@ -4,13 +4,11 @@ project(EndlessDungeon)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Source files
+file(GLOB ASSET_FILES "assets/use/*.png")
+
 set(SOURCES
   src/main.cpp
-  src/game.cpp
-  src/dungeon.cpp
-  src/metadata.h
-  src/utils/texture_loader.c
-  src/utils/random.cpp
+  src/metadata.c
 )
 
 # Client Executable
@@ -23,10 +21,22 @@ if(EMSCRIPTEN)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build-wasm/$<CONFIGURATION>")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build-wasm/$<CONFIGURATION>")
   set_target_properties(EndlessDungeon PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build-wasm")
+
+  # Copy asset files to build-wasm directory
+  add_custom_command(TARGET EndlessDungeon POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/assets/use" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets"
+  )
 else()
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build-client/$<CONFIGURATION>")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build-client/$<CONFIGURATION>")
   set_target_properties(EndlessDungeon PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build-client")
+
+  # Copy asset files to build-client directory
+  add_custom_command(TARGET EndlessDungeon POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/assets/use" "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets"
+  )
 endif()
 
 # Copy compile_commands.json to root directory if different
